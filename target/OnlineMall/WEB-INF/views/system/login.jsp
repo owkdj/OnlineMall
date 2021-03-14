@@ -100,10 +100,8 @@
             return;
         }
         addClass(document.querySelector(".login"), "active")
-        setTimeout(function(){
-            addClass(document.querySelector(".sk-rotating-plane"), "active")
-            document.querySelector(".login").style.display = "none"
-        },800)
+        addClass(document.querySelector(".sk-rotating-plane"), "active")
+        document.querySelector(".login").style.display = "none"
         $.ajax({
             url:'login',
             data:{username:username,password:password,cpacha:cpacha},
@@ -111,19 +109,16 @@
             dataType:'json',
             success:function (data) {
                 if(data.type == 'success'){
-
+                     window.location = 'index';
                 }else{
-                    
+                    removeClass(document.querySelector(".login"), "active");
+                    removeClass(document.querySelector(".sk-rotating-plane"), "active");
+                    document.querySelector(".login").style.display = "block";
+                    alert(data.msg);
+                    changeCpacha();
                 }
             }
         })
-        setTimeout(function(){
-            removeClass(document.querySelector(".login"), "active")
-            removeClass(document.querySelector(".sk-rotating-plane"), "active")
-            document.querySelector(".login").style.display = "block"
-            alert("登录成功")
-
-        },5000)
     }
 </script>
 </body></html>
