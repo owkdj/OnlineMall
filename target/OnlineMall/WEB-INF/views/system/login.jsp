@@ -80,7 +80,7 @@
 
     //切换验证码方法
     function changeCpacha() {
-        $("#cpacha-img").attr("src",'get_cpacha?vl=4&w=150&h=40&type=loginCpacha$t='+ new Date().getTime());
+        $("#cpacha-img").attr("src",'get_cpacha?vl=4&w=150&h=40&type=loginCpacha&t='+ new Date().getTime());
     }
 
     document.querySelector(".login-button").onclick = function(){

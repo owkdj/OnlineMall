@@ -1,7 +1,9 @@
 package cn.jdkwo.controller.admin;
 
 import cn.jdkwo.entity.admin.User;
+import cn.jdkwo.service.admin.UserService;
 import cn.jdkwo.util.CpachaUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +27,27 @@ import java.util.Map;
 @RequestMapping("/system")
 public class SystemController {
 
+    @Autowired
+    private UserService userService;
+
+    /**
+     * 后台登录主页
+     * @param model
+     * @return
+     */
      @RequestMapping(value="/index",method= RequestMethod.GET)
       public ModelAndView index(ModelAndView model){
          model.setViewName("system/index");
          //model.addObject("name","玉");
          return model;
       }
+
+    @RequestMapping(value="/welcome",method= RequestMethod.GET)
+    public ModelAndView welcome(ModelAndView model){
+        model.setViewName("system/welcome");
+        return model;
+    }
+
 
     /**
      * 登录控制方法
@@ -49,7 +66,7 @@ public class SystemController {
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
      public Map<String,String> loginAct(User user,String cpacha,HttpServletRequest request){
-        Map<String,String> ret = new HashMap<String, String>();
+        Map<String,String> ret = new HashMap<>();
         if(user == null){
             ret.put("type","error");
             ret.put("msg","请填写用户信息");
@@ -81,6 +98,18 @@ public class SystemController {
             ret.put("msg","验证码错误!");
             return ret;
         }
+        User byUsername = userService.findByUsername(user.getUsername());
+        if(byUsername == null){
+            ret.put("type","error");
+            ret.put("msg","该用户不存在!");
+            return ret;
+        }
+        if(!user.getPassword().equals(byUsername.getPassword())){
+            ret.put("type","error");
+            ret.put("msg","密码错误!");
+            return ret;
+        }
+        request.getSession().setAttribute("admin",byUsername);
         ret.put("type","success");
         ret.put("msg","登陆成功!");
         return ret;
