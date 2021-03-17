@@ -18,7 +18,7 @@
 <body>
 
 <div id="particles-js">
-    <div class="login" style="display: block;">
+    <div class="login" style="display: block;" onkeydown="keyLogin();">
         <div class="login-top">
             登录
         </div>
@@ -44,7 +44,7 @@
                 <img id="cpacha-img" title="点击切换验证码" style="cursor: pointer;" src="get_cpacha?vl=4&w=150&h=40&type=loginCpacha" width="110px" height="30px" onclick="changeCpacha()">
             </div>
         </div>
-        <div class="login-button">
+        <div id="button" class="login-button">
             登录
         </div>
     </div>
@@ -120,5 +120,12 @@
             }
         })
     }
+
+    //回车直接登陆
+    function keyLogin(){
+        if (event.keyCode==13)  //回车键的键值为13
+            document.getElementById("button").click(); //调用登录按钮的登录事件
+    }
+
 </script>
 </body></html>

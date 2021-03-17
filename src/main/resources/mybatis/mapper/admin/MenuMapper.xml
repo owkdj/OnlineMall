@@ -7,5 +7,39 @@
     <insert id="addMenu" parameterType="Menu">
         INSERT INTO menu(parentId,name,url,icon) VALUES(#{parentId},#{name},#{url},#{icon})
     </insert>
-
+    <!--菜单信息模糊分页查询-->
+    <select id="findList" parameterType="Map" resultType="Menu">
+        SELECT * FROM menu  WHERE 1 = 1
+        <if test="parentId != null ">
+            AND parentId= #{parentId}
+        </if>
+        <if test="name != null ">
+            AND name LIKE '%${name}%'
+        </if>
+        <if test="offset!=null and pageSize!=null">
+            limit #{offset},#{pageSize}
+        </if>
+    </select>
+    <!--获取模糊查询总记录数-->
+    <select id="getTotal" parameterType="Map" resultType="Integer">
+        SELECT COUNT(1) FROM menu WHERE 1 = 1
+        <if test="name != null ">
+           AND name LIKE '%${name}%'
+        </if>
+    </select>
+    <!--获取顶级菜单信息-->
+    <select id="findTopList" parameterType="Map" resultType="Menu">
+        SELECT * FROM menu WHERE parentId = 0
+    </select>
+    <!--获取某一分类子菜单信息-->
+    <select id="findChildernList" parameterType="Map" resultType="Menu">
+        SELECT * FROM menu WHERE parentId = #{parentId}
+    </select>
+    <!--修改菜单信息-->
+    <update id="edit" parameterType="Menu">
+        UPDATE menu set name = #{name},parentId = #{parentId},url = #{url},icon = #{icon} WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="Long">
+        DELETE FROM menu WHERE id = #{id}
+    </delete>
 </mapper>

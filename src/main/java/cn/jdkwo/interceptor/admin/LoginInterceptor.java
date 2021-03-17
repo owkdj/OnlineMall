@@ -33,9 +33,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object arg2) throws Exception {
 
-        String requestURI = request.getRequestURI();
+        //String requestURI = request.getRequestURI();
         Object admin = request.getSession().getAttribute("admin");
-        System.out.println(request.getContextPath()+"/system/login");
         if(admin == null){
             String header = request.getHeader("X-Requested-With");
             if("XMLHttpRequest".equals(header)){

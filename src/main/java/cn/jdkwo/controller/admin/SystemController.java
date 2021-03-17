@@ -66,7 +66,7 @@ public class SystemController {
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
      public Map<String,String> loginAct(User user,String cpacha,HttpServletRequest request){
-        Map<String,String> ret = new HashMap<>();
+        Map<String,String> ret = new HashMap<String,String>();
         if(user == null){
             ret.put("type","error");
             ret.put("msg","请填写用户信息");
@@ -98,21 +98,28 @@ public class SystemController {
             ret.put("msg","验证码错误!");
             return ret;
         }
-        User byUsername = userService.findByUsername(user.getUsername());
-        if(byUsername == null){
+        //防止链接数据库失败异常
+        try {
+            User byUsername = userService.findByUsername(user.getUsername());
+            if(byUsername == null){
+                ret.put("type","error");
+                ret.put("msg","该用户不存在!");
+                return ret;
+            }
+            if(!user.getPassword().equals(byUsername.getPassword())){
+                ret.put("type","error");
+                ret.put("msg","密码错误!");
+                return ret;
+            }
+            request.getSession().setAttribute("admin",byUsername);
+            ret.put("type","success");
+            ret.put("msg","登陆成功!");
+            return ret;
+        }catch (Exception e){
             ret.put("type","error");
-            ret.put("msg","该用户不存在!");
+            ret.put("msg","服务器故障,请联系管理员!");
             return ret;
         }
-        if(!user.getPassword().equals(byUsername.getPassword())){
-            ret.put("type","error");
-            ret.put("msg","密码错误!");
-            return ret;
-        }
-        request.getSession().setAttribute("admin",byUsername);
-        ret.put("type","success");
-        ret.put("msg","登陆成功!");
-        return ret;
     }
 
     /**
