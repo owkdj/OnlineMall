@@ -12,6 +12,7 @@ public class User implements Serializable{
     private Long id;//用户id
     private String username;//用户名
     private String password;
+    private Long roleId;//所属角色id
     private  String photo;//用户头像
     private int sex;//0为未知，1代表男，2代表女
     private Integer age;
@@ -35,6 +36,14 @@ public class User implements Serializable{
 
     public String getPassword() {
         return password;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public void setPassword(String password) {
@@ -79,6 +88,7 @@ public class User implements Serializable{
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", roleId=" + roleId +
                 ", photo='" + photo + '\'' +
                 ", sex=" + sex +
                 ", age=" + age +
