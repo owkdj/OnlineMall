@@ -44,7 +44,7 @@ public class MenuController {
     }
 
     /**
-     * 处理list传来的post请求
+     * 返回菜单list
      *
      * @param
      * @return
@@ -54,13 +54,29 @@ public class MenuController {
     public Map<String, Object> getMenuList(Page page, @RequestParam(name = "name", required = false, defaultValue = "") String name) {
         Map<String, Object> ret = new HashMap<>();
         Map<String, Object> queryMap = new HashMap<>();
-        queryMap.put("offset", page.getOffset());
-        queryMap.put("pageSize", page.getRows());
-        queryMap.put("name", name);
-        System.out.println(queryMap);
-        List<Menu> list = menuService.findList(queryMap);
-        System.out.println(list);
-        ret.put("rows", list);
+        //
+        List<Menu> list = new ArrayList<>();
+        List<Menu> listview = new ArrayList<>();
+        List<Menu> topList = menuService.findTopList();
+        for (Menu topMenu : topList
+                ) {
+            list.add(topMenu);
+            queryMap.put("parentId", topMenu.getId());
+            queryMap.put("name", name);
+            List<Menu> list1 = menuService.findList(queryMap);
+            for (Menu childernlist : list1
+                    ) {
+                list.add(childernlist);
+                list.addAll(menuService.findChildernList(childernlist.getId()));
+            }
+        }
+        //
+        int size = page.getOffset()+page.getRows();
+        if(size>list.size())size=list.size();
+        for(int i=page.getOffset();i<size;i++){
+                  listview.add(list.get(i));
+        }
+        ret.put("rows",listview);
         ret.put("total", menuService.getTotal(queryMap));
         return ret;
     }

@@ -15,4 +15,5 @@ public interface MenuService {
      int edit(Menu menu);
      int delete(Long id);
      List<Menu> findChildernList(Long parentId);
+     List<Menu> findThridChildernList(Long Id);
 }
