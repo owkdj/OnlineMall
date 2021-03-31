@@ -46,4 +46,9 @@ public class MenuServiceImpl implements MenuService{
         return menuDao.findChildernList(parentId);
     }
 
+    @Override
+    public List<Menu> findThridChildernList(Long Id) {
+        return menuDao.findThridChildernList(Id);
+    }
+
 }
